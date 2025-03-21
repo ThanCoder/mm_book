@@ -15,19 +15,15 @@ import '../widgets/index.dart';
 
 class PdfrxReader extends StatefulWidget {
   PdfConfigModel pdfConfig;
-  bool isOffline;
-  String onlineUrl;
+  String sourcePath;
   String title;
-  String pdfPath;
   void Function(PdfConfigModel pdfConfig)? saveConfig;
   PdfrxReader({
     super.key,
     required this.pdfConfig,
+    required this.sourcePath,
     this.saveConfig,
-    this.isOffline = true,
     this.title = 'PDF Reader',
-    this.onlineUrl = '',
-    this.pdfPath = '',
   });
 
   @override
@@ -194,7 +190,14 @@ class _PdfrxReaderState extends State<PdfrxReader> with WindowListener {
         title: const Text('Double Tap Is Exist FullScreen!'),
       ).show(context);
     }
-    // toggleFullScreenPlatform(isFullScreen);
+    await ThanPkg.platform.toggleFullScreen(isFullScreen: isFullScreen);
+    // if (Platform.isAndroid) {
+    //   if (isFull) {
+    //     await ThanPkg.android.app.showFullScreen();
+    //   } else {
+    //     await ThanPkg.android.app.hideFullScreen();
+    //   }
+    // }
   }
 
   PdfViewerParams getParams() => PdfViewerParams(
@@ -343,21 +346,21 @@ class _PdfrxReaderState extends State<PdfrxReader> with WindowListener {
   }
 
   Widget _getCurrentPdfReader() {
-    if (widget.isOffline && widget.pdfPath.isNotEmpty) {
-      return PdfViewer.file(
-        widget.pdfPath,
-        controller: pdfController,
-        params: getParams(),
-      );
-    }
-    if (!widget.isOffline && widget.onlineUrl.isNotEmpty) {
+    if (widget.sourcePath.isEmpty) return SizedBox.shrink();
+    if (widget.sourcePath.startsWith('http')) {
+      //is online
       return PdfViewer.uri(
-        Uri.parse(widget.onlineUrl),
+        Uri.parse(widget.sourcePath),
+        controller: pdfController,
+        params: getParams(),
+      );
+    } else {
+      return PdfViewer.file(
+        widget.sourcePath,
         controller: pdfController,
         params: getParams(),
       );
     }
-    return SizedBox.shrink();
   }
 
   Widget _getColorFilteredPdfReader() {

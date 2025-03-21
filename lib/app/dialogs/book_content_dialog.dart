@@ -37,9 +37,6 @@ class _BookContentDialogState extends State<BookContentDialog> {
 
   void _download(BuildContext ctx, String downloadUrl) async {
     try {
-      final title = widget.book.mmtitle;
-      final savePath = '${PathUtil.instance.getOutPath()}/$title.pdf';
-
       //check storage permission
       if (Platform.isAndroid) {
         if (!await ThanPkg.android.permission.isStoragePermissionGranted()) {
@@ -47,6 +44,9 @@ class _BookContentDialogState extends State<BookContentDialog> {
           return;
         }
       }
+      final title = widget.book.mmtitle;
+      final savePath = '${PathUtil.instance.getOutPath()}/$title.pdf';
+
       if (!ctx.mounted) return;
       showDialog(
         context: ctx,
@@ -69,6 +69,39 @@ class _BookContentDialogState extends State<BookContentDialog> {
   }
 
   void onRead() async {
+    //check storage permission
+    if (Platform.isAndroid) {
+      if (!await ThanPkg.android.permission.isStoragePermissionGranted()) {
+        await ThanPkg.android.permission.requestStoragePermission();
+        return;
+      }
+    }
+    //file ရှိနေလား စစ်မယ်
+    final title = widget.book.mmtitle;
+    final filePath = '${PathUtil.instance.getOutPath()}/$title.pdf';
+
+    if (File(filePath).existsSync()) {
+      final config =
+          await PdfConfigServices.getConfig(cacheName: widget.book.mmtitle);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PdfrxReader(
+            pdfConfig: config,
+            sourcePath: filePath,
+            title: widget.book.mmtitle,
+            saveConfig: (pdfConfig) async {
+              await PdfConfigServices.setConfig(
+                cacheName: widget.book.mmtitle,
+                config: pdfConfig,
+              );
+            },
+          ),
+        ),
+      );
+      return;
+    }
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -83,8 +116,8 @@ class _BookContentDialogState extends State<BookContentDialog> {
             MaterialPageRoute(
               builder: (context) => PdfrxReader(
                 pdfConfig: config,
-                onlineUrl: downloadUrl,
-                isOffline: false,
+                sourcePath: downloadUrl,
+                title: widget.book.mmtitle,
                 saveConfig: (pdfConfig) async {
                   await PdfConfigServices.setConfig(
                     cacheName: widget.book.mmtitle,

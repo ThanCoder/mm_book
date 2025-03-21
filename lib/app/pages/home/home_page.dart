@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mm_book/app/components/book_grid_item.dart';
 import 'package:mm_book/app/components/book_list_item.dart';
-import 'package:mm_book/app/customs/book_search_delegate.dart';
 import 'package:mm_book/app/dialogs/book_content_dialog.dart';
 import 'package:mm_book/app/models/m_m_book_model.dart';
 import 'package:mm_book/app/providers/book_provider.dart';
@@ -123,9 +122,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _search() {
-    showSearch(context: context, delegate: BookSearchDelegate());
-  }
+  // void _search() {
+  //   showSearch(context: context, delegate: BookSearchDelegate());
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -137,10 +136,10 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(appTitle),
         actions: [
-          IconButton(
-            onPressed: _search,
-            icon: Icon(Icons.search),
-          ),
+          // IconButton(
+          //   onPressed: _search,
+          //   icon: Icon(Icons.search),
+          // ),
           IconButton(
             onPressed: () {
               setState(() {

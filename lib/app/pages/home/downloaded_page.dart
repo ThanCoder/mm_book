@@ -62,8 +62,8 @@ class _DownloadedPageState extends State<DownloadedPage> {
       MaterialPageRoute(
         builder: (context) => PdfrxReader(
           pdfConfig: config,
-          isOffline: true,
-          pdfPath: book.path,
+          title: book.title,
+          sourcePath: book.path,
           saveConfig: (pdfConfig) async {
             await PdfConfigServices.setConfig(
               cacheName: book.title,
