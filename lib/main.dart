@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mm_book/app/providers/book_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:than_pkg/than_pkg.dart';
 
 import 'app/my_app.dart';
@@ -11,5 +13,12 @@ void main() async {
   //init config
   await initAppConfigService();
 
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => BookProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }

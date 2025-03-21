@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as html;
+import 'package:mm_book/app/constants.dart';
 import 'package:mm_book/app/services/core/rabbit.dart';
 import 'package:mm_book/app/services/html_dom_services.dart';
 
@@ -31,6 +32,32 @@ class MMBookModel {
     final divList = ele.querySelectorAll('.panel-body .row > div');
 
     var mmTitle = '';
+    var url =
+        HtmlDomServices.getQuerySelectorAttr(ele, '.panel-heading a', 'href');
+    //pdf
+    final urls = ele.querySelectorAll('.footer-social2 li');
+    if (urls.isNotEmpty &&
+        HtmlDomServices.getQuerySelectorAttr(urls.last, 'a', 'href')
+            .isNotEmpty) {
+      url = HtmlDomServices.getQuerySelectorAttr(urls.last, 'a', 'href');
+    }
+
+    var size = details.last.text;
+    var date = details.first.text;
+    var viewCount = details.toList()[1].text;
+
+    if (url.isNotEmpty) {
+      url = '$hostUrl/$url';
+    }
+    if (size.isNotEmpty) {
+      size = size.replaceAll(': ', '');
+    }
+    if (date.isNotEmpty) {
+      date = date.replaceAll(': ', '');
+    }
+    if (viewCount.isNotEmpty) {
+      viewCount = viewCount.replaceAll('View: ', '');
+    }
 
     try {
       final res =
@@ -46,16 +73,15 @@ class MMBookModel {
     return MMBookModel(
       title: HtmlDomServices.getQuerySelectorText(ele, '.panel-heading a'),
       mmtitle: mmTitle,
-      url:
-          HtmlDomServices.getQuerySelectorAttr(ele, '.panel-heading a', 'href'),
+      url: url,
       coverUrl: HtmlDomServices.getQuerySelectorAttr(
           ele, '.panel-body .img-thumbnail', 'src'),
       author:
           HtmlDomServices.getQuerySelectorText(ele, '.panel-body .author a'),
       genres: HtmlDomServices.getQuerySelectorText(ele, '.panel-body .badge'),
-      size: details.first.text,
-      viewCount: details.toList()[1].text,
-      date: details.last.text,
+      size: size,
+      viewCount: viewCount,
+      date: date,
     );
   }
 

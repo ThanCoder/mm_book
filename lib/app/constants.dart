@@ -17,6 +17,11 @@ const androidRootPath = "/storage/emulated/0";
 const appConfigFileName = 'main.config.json';
 const appMainDatabaseName = 'main.db.json';
 const appGenresDatabaseName = 'genres.db.json';
+//pdf
+const chapterBookMarkListName = 'fav_list2.json';
+const pdfConfigName = '-v3-config.json';
+const pdfOldConfigName = '-config.json';
+const pdfBookListName = '-book_list.json';
 
 final activeColor = Colors.teal[600];
 const dangerColor = Colors.red;

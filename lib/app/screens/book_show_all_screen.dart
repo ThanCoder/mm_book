@@ -3,23 +3,28 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mm_book/app/components/book_grid_item.dart';
 import 'package:mm_book/app/components/book_list_item.dart';
-import 'package:mm_book/app/customs/book_search_delegate.dart';
 import 'package:mm_book/app/dialogs/book_content_dialog.dart';
 import 'package:mm_book/app/models/m_m_book_model.dart';
-import 'package:mm_book/app/providers/book_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:mm_book/app/services/m_m_book_services.dart';
+import 'package:mm_book/app/utils/path_util.dart';
+import 'package:mm_book/app/widgets/core/index.dart';
 
-import '../../constants.dart';
-import '../../widgets/index.dart';
+import '../widgets/core/cache_image.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class BookShowAllScreen extends StatefulWidget {
+  String title;
+  String url;
+  BookShowAllScreen({
+    super.key,
+    required this.title,
+    required this.url,
+  });
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<BookShowAllScreen> createState() => _BookShowAllScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _BookShowAllScreenState extends State<BookShowAllScreen> {
   final ScrollController listController = ScrollController();
 
   @override
@@ -31,10 +36,57 @@ class _HomePageState extends State<HomePage> {
 
   bool isListItem = false;
   bool isDataLoading = false;
+  bool isLoading = false;
   double lastScroll = 0;
+  List<MMBookModel> list = [];
+  String nextUrl = '';
 
   void init() async {
-    context.read<BookProvider>().initList();
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      final res = await MMBookServices.instance.getBookList(widget.url);
+      nextUrl = res.nextUrl;
+      list = res.list;
+
+      if (!mounted) return;
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        isLoading = false;
+      });
+      debugPrint(e.toString());
+    }
+  }
+
+  void _loadData() async {
+    try {
+      if (nextUrl.isEmpty) return;
+      setState(() {
+        isLoading = true;
+        isDataLoading = true;
+      });
+      final res = await MMBookServices.instance.getBookList(nextUrl);
+      nextUrl = res.nextUrl;
+      list.addAll(res.list);
+
+      if (!mounted) return;
+      setState(() {
+        isLoading = false;
+        isDataLoading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        isLoading = false;
+        isDataLoading = false;
+      });
+      debugPrint(e.toString());
+    }
   }
 
   void _onScroll() {
@@ -47,12 +99,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _loadData() async {
-    isDataLoading = true;
-    await context.read<BookProvider>().nextPage();
-    isDataLoading = false;
-  }
-
   void _showBookContent(MMBookModel book) {
     showDialog(
       context: context,
@@ -60,7 +106,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _getListView(List<MMBookModel> list, bool isLoading) {
+  Widget _getListView() {
     if (list.isEmpty) {
       return Center(
         child: Column(
@@ -80,7 +126,7 @@ class _HomePageState extends State<HomePage> {
     }
     return RefreshIndicator(
       onRefresh: () async {
-        await context.read<BookProvider>().initList(isClearList: true);
+        init();
       },
       child: CustomScrollView(
         controller: listController,
@@ -123,24 +169,25 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _search() {
-    showSearch(context: context, delegate: BookSearchDelegate());
+  Widget _getTitleWidget(String title) {
+    if (title.endsWith('.gif')) {
+      return SizedBox(
+        child: CacheImage(
+          url: title,
+          fit: BoxFit.contain,
+          cachePath: PathUtil.instance.getCachePath(),
+        ),
+      );
+    }
+    return Text(title);
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<BookProvider>();
-    final isLoading = provider.isLoading;
-    final list = provider.getList;
-
     return MyScaffold(
       appBar: AppBar(
-        title: Text(appTitle),
+        title: _getTitleWidget(widget.title),
         actions: [
-          IconButton(
-            onPressed: _search,
-            icon: Icon(Icons.search),
-          ),
           IconButton(
             onPressed: () {
               setState(() {
@@ -151,19 +198,13 @@ class _HomePageState extends State<HomePage> {
           ),
           Platform.isLinux
               ? IconButton(
-                  onPressed: () async {
-                    await context
-                        .read<BookProvider>()
-                        .initList(isClearList: true);
-                  },
+                  onPressed: () async {},
                   icon: Icon(Icons.refresh),
                 )
               : SizedBox.shrink(),
         ],
       ),
-      body: !isDataLoading && isLoading
-          ? TLoader()
-          : _getListView(list, isLoading),
+      body: !isDataLoading && isLoading ? TLoader() : _getListView(),
     );
   }
 

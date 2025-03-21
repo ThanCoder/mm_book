@@ -1,7 +1,8 @@
 name: mm_book
 description: "myanmar book website web scraping..."
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
-version: 0.0.1
+version: 1.0.0
+repository: "https://github.com/ThanCoder/mm_book"
 
 environment:
   sdk: ^3.6.1
@@ -18,10 +19,12 @@ dependencies:
   flutter_spinkit: ^5.2.1
   html: ^0.15.5
   intl: ^0.20.2
+  pdfrx: ^1.1.12
   provider: ^6.1.2
   than_pkg: ^1.6.3
   url_launcher: ^6.3.1
   uuid: ^4.5.1
+  mime: ^2.0.0
 
 dev_dependencies:
   change_app_package_name: ^1.4.0

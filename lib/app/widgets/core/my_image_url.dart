@@ -5,18 +5,18 @@ import '../../constants.dart';
 class MyImageUrl extends StatelessWidget {
   String url;
   String defaultAssetsPath;
-  BoxFit fit;
   double? width;
   double? height;
+  BoxFit fit;
   double borderRadius;
 
   MyImageUrl({
     super.key,
     required this.url,
     this.defaultAssetsPath = defaultIconAssetsPath,
-    this.fit = BoxFit.cover,
     this.width,
     this.height,
+    this.fit = BoxFit.cover,
     this.borderRadius = 5,
   });
 

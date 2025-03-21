@@ -1,25 +1,21 @@
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import '../../extensions/index.dart';
-
-import '../../constants.dart';
-import '../../notifiers/app_notifier.dart';
-import '../../utils/path_util.dart';
-import '../index.dart';
+import 'package:mm_book/app/extensions/string_extension.dart';
+import 'package:mm_book/app/services/core/dio_services.dart';
+import 'package:mm_book/app/widgets/index.dart';
 
 class CacheImage extends StatefulWidget {
   String url;
-  String? cacheName;
-  double? width;
+  String? cachePath;
   double? height;
+  double? width;
   BoxFit fit;
   double borderRadius;
   CacheImage({
     super.key,
     required this.url,
-    this.cacheName,
+    this.cachePath,
     this.width,
     this.height,
     this.fit = BoxFit.cover,
@@ -34,78 +30,62 @@ class _CacheImageState extends State<CacheImage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => init());
+    init();
   }
 
-  bool isLoading = true;
-  final dio = Dio();
+  bool isLoading = false;
+  bool isExists = false;
 
   void init() async {
     try {
+      if (widget.cachePath == null) return;
+      //check file
+      final file = File('${widget.cachePath}/${widget.url.getName()}');
+      if (await file.exists()) {
+        setState(() {
+          isExists = true;
+        });
+        return;
+      }
+      //မရှိရင်
+      if (!mounted) return;
       setState(() {
         isLoading = true;
       });
-
-      final cacheFile = File(_getCachePath());
-      //မရှိရင် download
-      if (!await cacheFile.exists()) {
-        await dio.download(
-            '${appConfigNotifier.value.forwardProxyUrl}?url=${widget.url}',
-            cacheFile.path);
-      }
-
+      await DioServices.instance.getDio.download(widget.url, file.path);
       if (!mounted) return;
       setState(() {
         isLoading = false;
+        isExists = true;
       });
     } catch (e) {
       if (!mounted) return;
       setState(() {
         isLoading = false;
       });
-      debugPrint(e.toString());
     }
   }
-
-  String _getCachePath() {
-    var cacheName = widget.url.getName();
-    if (widget.cacheName != null && widget.cacheName!.isNotEmpty) {
-      cacheName = widget.cacheName!;
-    }
-    return '${PathUtil.instance.getCachePath()}/$cacheName';
-  }
-
-  Widget _getImageWidget() {
-    final file = File(_getCachePath());
-    if (file.existsSync()) {
-      return Image.file(
-        file,
-        fit: widget.fit,
-        width: widget.width,
-        height: widget.height,
-        errorBuilder: (context, error, stackTrace) {
-          file.deleteSync();
-          return _getAssetsImage();
-        },
-      );
-    } else {
-      return _getAssetsImage();
-    }
-  }
-
-  Widget _getAssetsImage() => Image.asset(
-        defaultIconAssetsPath,
-        fit: widget.fit,
-      );
 
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
       return TLoader();
     }
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(widget.borderRadius),
-      child: _getImageWidget(),
+    if (isExists) {
+      return MyImageFile(
+        path: '${widget.cachePath}/${widget.url.getName()}',
+        width: widget.height,
+        height: widget.height,
+        fit: widget.fit,
+        borderRadius: widget.borderRadius,
+      );
+    }
+    return MyImageUrl(
+      url: widget.url,
+      width: widget.height,
+      height: widget.height,
+      fit: widget.fit,
+      borderRadius: widget.borderRadius,
     );
   }
 }

@@ -10,7 +10,7 @@ class DownloadDialog extends StatefulWidget {
   String url;
   String message;
   String saveFullPath;
-  void Function(String savedPath) onSuccess;
+  void Function() onSuccess;
   void Function(String msg) onError;
   DownloadDialog({
     super.key,
@@ -54,13 +54,13 @@ class _DownloadDialogState extends State<DownloadDialog> {
           });
         },
       );
-      widget.onSuccess(widget.saveFullPath);
       if (!mounted) return;
       Navigator.pop(context);
+      widget.onSuccess();
     } catch (e) {
-      widget.onError(e.toString());
       if (!mounted) return;
       Navigator.pop(context);
+      widget.onError(e.toString());
     }
   }
 
@@ -100,16 +100,19 @@ class _DownloadDialogState extends State<DownloadDialog> {
       actions: [
         TextButton(
           onPressed: () {
+            Navigator.pop(context);
             _downloadCancel();
           },
           child: const Text('Cancel'),
         ),
-        // TextButton(
-        //   onPressed:() {
+        // fileSize.toInt() == downloadedSize.toInt()
+        //     ? TextButton(
+        //         onPressed: () {
         //           Navigator.pop(context);
         //         },
-        //   child: const Text('Upgrade'),
-        // ),
+        //         child: const Text('Close'),
+        //       )
+        //     : SizedBox.shrink(),
       ],
     );
   }
