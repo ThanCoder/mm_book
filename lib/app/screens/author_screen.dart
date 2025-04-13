@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:mm_book/app/azlib/a_z_contact_info.dart';
+import 'package:mm_book/app/azlib/a_z_list_view.dart';
+import 'package:mm_book/app/extensions/index.dart';
 import 'package:mm_book/app/models/book_author_model.dart';
 import 'package:mm_book/app/screens/book_show_all_screen.dart';
 import 'package:mm_book/app/services/m_m_book_services.dart';
@@ -50,6 +53,7 @@ class _AuthorScreenState extends State<AuthorScreen> {
 
   Widget _getAuthorType() {
     return DropdownButton<String>(
+      padding: EdgeInsets.all(5),
       value: authorType,
       items: const [
         DropdownMenuItem<String>(
@@ -69,6 +73,30 @@ class _AuthorScreenState extends State<AuthorScreen> {
         init();
       },
     );
+  }
+
+  Widget _getTitleWidget(BookAuthorModel author, {bool isAZWidet = false}) {
+    if (author.imageUrl.isNotEmpty) {
+      if (PlatformExtension.isDesktop()) {
+        return CacheImage(
+          maxWidth: 50,
+          url: author.imageUrl,
+          // fit: BoxFit.contain,
+          cachePath: PathUtil.instance.getCachePath(),
+        );
+      }
+      // is linux
+      return CacheImage(
+        maxWidth: 50,
+        url: author.imageUrl,
+        // fit: BoxFit.contain,
+        cachePath: PathUtil.instance.getCachePath(),
+      );
+    }
+    if (isAZWidet) {
+      return ListTile(title: Text(author.title));
+    }
+    return Text(author.title);
   }
 
   Widget _getListView() {
@@ -95,9 +123,6 @@ class _AuthorScreenState extends State<AuthorScreen> {
       },
       child: CustomScrollView(
         slivers: [
-          SliverToBoxAdapter(
-            child: _getAuthorType(),
-          ),
           SliverList.separated(
             itemBuilder: (context, index) {
               final author = list[index];
@@ -138,24 +163,34 @@ class _AuthorScreenState extends State<AuthorScreen> {
     );
   }
 
-  Widget _getTitleWidget(BookAuthorModel author) {
-    if (author.imageUrl.isNotEmpty) {
-      return SizedBox(
-        child: CacheImage(
-          url: author.imageUrl,
-          fit: BoxFit.contain,
-          cachePath: PathUtil.instance.getCachePath(),
-        ),
-      );
-    }
-    return Text(author.title);
+  List<AZContactInfo> _getAZContacts() {
+    List<AZContactInfo> azList = [];
+    var tag = '';
+    azList = list.map((ba) {
+      if (ba.title.isNotEmpty) {
+        tag = ba.title.toUpperCase().substring(0, 1);
+      }
+      // print(tag);
+      return AZContactInfo(
+          widget: _getTitleWidget(ba, isAZWidet: true), tag: tag);
+    }).toList();
+    // print(azList);
+    return azList;
   }
 
   @override
   Widget build(BuildContext context) {
     return MyScaffold(
       appBar: AppBar(
-        title: Text('Author'),
+        // title: Text('Author'),
+        title: Row(
+          spacing: 5,
+          children: [
+            const Text('Author'),
+            _getAuthorType(),
+          ],
+        ),
+
         actions: [
           Platform.isLinux
               ? IconButton(
@@ -165,7 +200,11 @@ class _AuthorScreenState extends State<AuthorScreen> {
               : SizedBox.shrink(),
         ],
       ),
-      body: isLoading ? TLoader() : _getListView(),
+      body: isLoading
+          ? TLoader()
+          : authorType == 'en'
+              ? AZListView(contactList: _getAZContacts())
+              : _getListView(),
     );
   }
 }

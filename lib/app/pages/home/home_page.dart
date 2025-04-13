@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mm_book/app/components/book_grid_item.dart';
 import 'package:mm_book/app/components/book_list_item.dart';
 import 'package:mm_book/app/dialogs/book_content_dialog.dart';
+import 'package:mm_book/app/general_server/index.dart';
 import 'package:mm_book/app/models/m_m_book_model.dart';
 import 'package:mm_book/app/providers/book_provider.dart';
 import 'package:provider/provider.dart';
@@ -136,10 +137,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(appTitle),
         actions: [
-          // IconButton(
-          //   onPressed: _search,
-          //   icon: Icon(Icons.search),
-          // ),
+          GeneralServerNotiButton(),
           IconButton(
             onPressed: () {
               setState(() {

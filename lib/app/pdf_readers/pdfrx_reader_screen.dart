@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:cherry_toast/cherry_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mm_book/app/models/pdf_config_model.dart';
+import 'package:mm_book/app/pdf_readers/pdf_config_model.dart';
 import 'package:mm_book/app/notifiers/app_notifier.dart';
-import 'package:mm_book/app/pdf_readers/pdf_reader_config_action_component.dart';
+import 'package:mm_book/app/pdf_readers/pdf_reader_setting_dialog.dart';
 import 'package:pdfrx/pdfrx.dart';
 import 'package:than_pkg/than_pkg.dart';
 import 'package:window_manager/window_manager.dart';
@@ -13,12 +13,12 @@ import 'package:window_manager/window_manager.dart';
 import '../dialogs/index.dart';
 import '../widgets/index.dart';
 
-class PdfrxReader extends StatefulWidget {
+class PdfrxReaderScreen extends StatefulWidget {
   PdfConfigModel pdfConfig;
   String sourcePath;
   String title;
   void Function(PdfConfigModel pdfConfig)? saveConfig;
-  PdfrxReader({
+  PdfrxReaderScreen({
     super.key,
     required this.pdfConfig,
     required this.sourcePath,
@@ -27,10 +27,11 @@ class PdfrxReader extends StatefulWidget {
   });
 
   @override
-  State<PdfrxReader> createState() => _PdfrxReaderState();
+  State<PdfrxReaderScreen> createState() => _PdfrxReaderScreenState();
 }
 
-class _PdfrxReaderState extends State<PdfrxReader> with WindowListener {
+class _PdfrxReaderScreenState extends State<PdfrxReaderScreen>
+    with WindowListener {
   PdfViewerController pdfController = PdfViewerController();
   bool isLoading = true;
   int currentPage = 1;
@@ -184,20 +185,22 @@ class _PdfrxReaderState extends State<PdfrxReader> with WindowListener {
     setState(() {
       isFullScreen = isFull;
     });
-    if (isFull) {
-      CherryToast.info(
-        inheritThemeColors: true,
-        title: const Text('Double Tap Is Exist FullScreen!'),
-      ).show(context);
-    }
     await ThanPkg.platform.toggleFullScreen(isFullScreen: isFullScreen);
-    // if (Platform.isAndroid) {
-    //   if (isFull) {
-    //     await ThanPkg.android.app.showFullScreen();
-    //   } else {
-    //     await ThanPkg.android.app.hideFullScreen();
-    //   }
-    // }
+  }
+
+  void _showSetting() {
+    showDialog(
+      context: context,
+      builder: (context) => PdfReaderSettingDialog(
+        config: config,
+        onApply: (changedConfig) {
+          config = changedConfig;
+          _saveConfig();
+          _initConfig();
+          setState(() {});
+        },
+      ),
+    );
   }
 
   PdfViewerParams getParams() => PdfViewerParams(
@@ -323,21 +326,21 @@ class _PdfrxReaderState extends State<PdfrxReader> with WindowListener {
             //full screen
             IconButton(
               onPressed: () {
+                if (!isFullScreen) {
+                  CherryToast.info(
+                    inheritThemeColors: true,
+                    title: const Text('Double Tap Is Exist FullScreen!'),
+                  ).show(context);
+                }
                 _toggleFullScreen(!isFullScreen);
               },
               icon:
                   Icon(isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen),
             ),
             //setting
-            PdfReaderConfigActionComponent(
-              pdfConfig: config,
-              onApply: (pdfConfig) {
-                setState(() {
-                  config = pdfConfig;
-                });
-                _saveConfig();
-                _initConfig();
-              },
+            IconButton(
+              onPressed: _showSetting,
+              icon: const Icon(Icons.more_vert),
             ),
           ],
         ),
@@ -405,7 +408,8 @@ class _PdfrxReaderState extends State<PdfrxReader> with WindowListener {
         focusNode: FocusNode(),
         onKeyEvent: _onKeyboradPressed,
         child: GestureDetector(
-          onDoubleTap: () => _toggleFullScreen(false),
+          onDoubleTap: () => _toggleFullScreen(!isFullScreen),
+          onSecondaryTap: _showSetting,
           child: Stack(
             children: [
               _getColorFilteredPdfReader(),

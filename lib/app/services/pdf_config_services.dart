@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:mm_book/app/models/pdf_config_model.dart';
+import 'package:mm_book/app/pdf_readers/pdf_config_model.dart';
 import 'package:mm_book/app/utils/index.dart';
 
 class PdfConfigServices {

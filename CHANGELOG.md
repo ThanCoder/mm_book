@@ -1,3 +1,10 @@
+## 1.0.2
+
+## Added && Fixed
+- author အတွက် `azlistview` lib ထည့်ခြင်း
+- version system ထည့်ခြင်း
+- error အချို့ ဖြေရှင်းခြင်း
+
 ## 1.0.1
 
 ## Added

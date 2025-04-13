@@ -12,6 +12,7 @@ class CacheImage extends StatefulWidget {
   double? width;
   BoxFit fit;
   double borderRadius;
+  double maxWidth;
   CacheImage({
     super.key,
     required this.url,
@@ -20,6 +21,7 @@ class CacheImage extends StatefulWidget {
     this.height,
     this.fit = BoxFit.cover,
     this.borderRadius = 5,
+    this.maxWidth = double.infinity,
   });
 
   @override
@@ -80,12 +82,17 @@ class _CacheImageState extends State<CacheImage> {
         borderRadius: widget.borderRadius,
       );
     }
-    return MyImageUrl(
-      url: widget.url,
-      width: widget.height,
-      height: widget.height,
-      fit: widget.fit,
-      borderRadius: widget.borderRadius,
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxWidth: widget.maxWidth,
+      ),
+      child: MyImageUrl(
+        url: widget.url,
+        width: widget.height,
+        height: widget.height,
+        fit: widget.fit,
+        borderRadius: widget.borderRadius,
+      ),
     );
   }
 }

@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:mm_book/app/components/index.dart';
 import 'package:mm_book/app/dialogs/book_download_link_preparing_dialog.dart';
 import 'package:mm_book/app/dialogs/core/download_dialog.dart';
+import 'package:mm_book/app/go_route_helper.dart';
 import 'package:mm_book/app/models/m_m_book_model.dart';
-import 'package:mm_book/app/pdf_readers/pdfrx_reader.dart';
-import 'package:mm_book/app/services/pdf_config_services.dart';
 import 'package:mm_book/app/utils/path_util.dart';
 import 'package:mm_book/app/widgets/core/cache_image.dart';
 import 'package:than_pkg/than_pkg.dart';
@@ -81,24 +80,7 @@ class _BookContentDialogState extends State<BookContentDialog> {
     final filePath = '${PathUtil.instance.getOutPath()}/$title.pdf';
 
     if (File(filePath).existsSync()) {
-      final config =
-          await PdfConfigServices.getConfig(cacheName: widget.book.mmtitle);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PdfrxReader(
-            pdfConfig: config,
-            sourcePath: filePath,
-            title: widget.book.mmtitle,
-            saveConfig: (pdfConfig) async {
-              await PdfConfigServices.setConfig(
-                cacheName: widget.book.mmtitle,
-                config: pdfConfig,
-              );
-            },
-          ),
-        ),
-      );
+      goPdfReader(context, filePath);
       return;
     }
 
@@ -109,24 +91,7 @@ class _BookContentDialogState extends State<BookContentDialog> {
         book: widget.book,
         submitTitle: 'ဖတ်မယ်',
         onSubmit: (downloadUrl) async {
-          final config =
-              await PdfConfigServices.getConfig(cacheName: widget.book.mmtitle);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PdfrxReader(
-                pdfConfig: config,
-                sourcePath: downloadUrl,
-                title: widget.book.mmtitle,
-                saveConfig: (pdfConfig) async {
-                  await PdfConfigServices.setConfig(
-                    cacheName: widget.book.mmtitle,
-                    config: pdfConfig,
-                  );
-                },
-              ),
-            ),
-          );
+          goPdfReader(context, downloadUrl);
         },
       ),
     );

@@ -3,10 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mm_book/app/components/offline_book_grid_item.dart';
 import 'package:mm_book/app/components/offline_book_list_item.dart';
+import 'package:mm_book/app/go_route_helper.dart';
 import 'package:mm_book/app/models/offline_book_model.dart';
-import 'package:mm_book/app/pdf_readers/pdfrx_reader.dart';
 import 'package:mm_book/app/services/offline_book_services.dart';
-import 'package:mm_book/app/services/pdf_config_services.dart';
 import 'package:mm_book/app/widgets/core/index.dart';
 import 'package:than_pkg/than_pkg.dart';
 
@@ -56,23 +55,7 @@ class _DownloadedPageState extends State<DownloadedPage> {
   }
 
   void _showBookContent(OfflineBookModel book) async {
-    final config = await PdfConfigServices.getConfig(cacheName: book.title);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PdfrxReader(
-          pdfConfig: config,
-          title: book.title,
-          sourcePath: book.path,
-          saveConfig: (pdfConfig) async {
-            await PdfConfigServices.setConfig(
-              cacheName: book.title,
-              config: pdfConfig,
-            );
-          },
-        ),
-      ),
-    );
+    goPdfReader(context, book.path);
   }
 
   Widget _getListView() {
