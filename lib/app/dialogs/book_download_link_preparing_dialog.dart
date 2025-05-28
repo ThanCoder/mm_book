@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mm_book/app/models/m_m_book_model.dart';
-import 'package:mm_book/app/services/index.dart';
+import 'package:mm_book/app/services/core/dio_services.dart';
 import 'package:mm_book/app/services/m_m_book_services.dart';
-import 'package:mm_book/app/utils/index.dart';
-import 'package:mm_book/app/widgets/core/t_loader.dart';
+import 'package:t_widgets/t_widgets.dart';
+import 'package:than_pkg/than_pkg.dart';
+
 
 class BookDownloadLinkPreparingDialog extends StatefulWidget {
   MMBookModel book;
@@ -73,7 +74,7 @@ class _BookDownloadLinkPreparingDialogState
                 children: [
                   Text('Url: ${url.toString()}'),
                   Text(
-                      'Size: ${AppUtil.instance.getParseFileSize(size.toDouble())}'),
+                      'Size: ${size.toDouble().toFileSizeLabel()}'),
                   size == 0
                       ? Text(
                           'File မရှိပါ!.....',

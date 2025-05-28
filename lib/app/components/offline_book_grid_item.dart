@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mm_book/app/models/offline_book_model.dart';
-import 'package:mm_book/app/widgets/index.dart';
+import 'package:t_widgets/widgets/t_image_file.dart';
+
 
 class OfflineBookGridItem extends StatelessWidget {
   OfflineBookModel book;
@@ -22,7 +23,7 @@ class OfflineBookGridItem extends StatelessWidget {
             Column(
               children: [
                 Expanded(
-                  child: MyImageFile(
+                  child: TImageFile(
                     path: book.coverPath,
                     width: double.infinity,
                     fit: BoxFit.fill,

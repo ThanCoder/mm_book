@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:mm_book/app/components/book_grid_item.dart';
 import 'package:mm_book/app/components/book_list_item.dart';
 import 'package:mm_book/app/dialogs/book_content_dialog.dart';
-import 'package:mm_book/app/general_server/index.dart';
 import 'package:mm_book/app/models/m_m_book_model.dart';
 import 'package:mm_book/app/providers/book_provider.dart';
+import 'package:mm_book/my_libs/general_server/general_server_noti_button.dart';
 import 'package:provider/provider.dart';
+import 'package:t_widgets/t_widgets.dart';
 
 import '../../constants.dart';
-import '../../widgets/index.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -133,7 +134,7 @@ class _HomePageState extends State<HomePage> {
     final isLoading = provider.isLoading;
     final list = provider.getList;
 
-    return MyScaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text(appTitle),
         actions: [

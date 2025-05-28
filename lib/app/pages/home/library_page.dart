@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:mm_book/app/components/genres_view.dart';
 import 'package:mm_book/app/screens/author_screen.dart';
 import 'package:mm_book/app/screens/book_show_all_screen.dart';
-import 'package:mm_book/app/widgets/index.dart';
 
 class LibraryPage extends StatelessWidget {
   const LibraryPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MyScaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text('Library'),
         automaticallyImplyLeading: false,

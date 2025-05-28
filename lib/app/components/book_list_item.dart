@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mm_book/app/widgets/core/cache_image.dart';
 import 'package:mm_book/app/models/m_m_book_model.dart';
-import 'package:mm_book/app/utils/index.dart';
+import 'package:mm_book/my_libs/setting/path_util.dart';
+import 'package:t_widgets/widgets/t_cache_image.dart';
 
 class BookListItem extends StatelessWidget {
   MMBookModel book;
@@ -24,11 +24,11 @@ class BookListItem extends StatelessWidget {
             SizedBox(
               width: 150,
               height: 170,
-              child: CacheImage(
+              child: TCacheImage(
                 url: book.coverUrl,
                 width: double.infinity,
                 fit: BoxFit.fill,
-                cachePath: PathUtil.instance.getCachePath(),
+                cachePath: PathUtil.getCachePath(),
               ),
             ),
             Expanded(

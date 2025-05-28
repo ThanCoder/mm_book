@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:mm_book/my_libs/setting/app_notifier.dart';
 
-import '../../notifiers/app_notifier.dart';
 
 T? getRecentDB<T>(String key) {
   T? res;

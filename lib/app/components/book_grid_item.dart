@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mm_book/app/widgets/core/cache_image.dart';
+
 import 'package:mm_book/app/models/m_m_book_model.dart';
-import 'package:mm_book/app/utils/index.dart';
+import 'package:mm_book/my_libs/setting/path_util.dart';
+import 'package:t_widgets/t_widgets.dart' show TCacheImage;
 
 class BookGridItem extends StatelessWidget {
   MMBookModel book;
@@ -20,10 +21,10 @@ class BookGridItem extends StatelessWidget {
         cursor: SystemMouseCursors.click,
         child: Stack(
           children: [
-            CacheImage(
+            TCacheImage(
               url: book.coverUrl,
               width: double.infinity,
-              cachePath: PathUtil.instance.getCachePath(),
+              cachePath: PathUtil.getCachePath(),
             ),
             Positioned(
               bottom: 0,

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mm_book/app/models/offline_book_model.dart';
-import 'package:mm_book/app/utils/index.dart';
-import 'package:mm_book/app/widgets/core/index.dart';
+import 'package:t_widgets/t_widgets.dart';
+import 'package:than_pkg/than_pkg.dart';
+
 
 class OfflineBookListItem extends StatelessWidget {
   OfflineBookModel book;
@@ -24,7 +25,7 @@ class OfflineBookListItem extends StatelessWidget {
             SizedBox(
               width: 150,
               height: 170,
-              child: MyImageFile(
+              child: TImageFile(
                 path: book.coverPath,
                 width: double.infinity,
                 fit: BoxFit.fill,
@@ -41,8 +42,8 @@ class OfflineBookListItem extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                      'Size: ${AppUtil.instance.getParseFileSize(book.size.toDouble())}'),
-                  Text('Date: ${AppUtil.instance.getParseDate(book.date)}'),
+                      'Size: ${book.size.toDouble().toFileSizeLabel()}'),
+                  Text('Date: ${DateTime.fromMillisecondsSinceEpoch(book.date).toParseTime()}'),
                 ],
               ),
             ),

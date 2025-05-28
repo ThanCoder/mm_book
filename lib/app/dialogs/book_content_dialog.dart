@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:mm_book/app/components/index.dart';
 import 'package:mm_book/app/dialogs/book_download_link_preparing_dialog.dart';
 import 'package:mm_book/app/dialogs/core/download_dialog.dart';
 import 'package:mm_book/app/go_route_helper.dart';
 import 'package:mm_book/app/models/m_m_book_model.dart';
-import 'package:mm_book/app/utils/path_util.dart';
-import 'package:mm_book/app/widgets/core/cache_image.dart';
+import 'package:mm_book/my_libs/setting/path_util.dart';
+import 'package:mm_book/my_libs/setting/t_messenger.dart';
+import 'package:t_widgets/widgets/t_cache_image.dart';
 import 'package:than_pkg/than_pkg.dart';
 
 class BookContentDialog extends StatefulWidget {
@@ -44,7 +44,7 @@ class _BookContentDialogState extends State<BookContentDialog> {
         }
       }
       final title = widget.book.mmtitle;
-      final savePath = '${PathUtil.instance.getOutPath()}/$title.pdf';
+      final savePath = '${PathUtil.getOutPath()}/$title.pdf';
 
       if (!ctx.mounted) return;
       showDialog(
@@ -55,10 +55,11 @@ class _BookContentDialogState extends State<BookContentDialog> {
           saveFullPath: savePath,
           message: '`$title` Downloading...',
           onError: (msg) {
-            showDialogMessage(context, msg);
+            TMessenger.instance.showDialogMessage(context, msg);
           },
           onSuccess: () {
-            showDialogMessage(context, 'Download လုပ်ပြီးပါပြီ');
+            TMessenger.instance
+                .showDialogMessage(context, 'Download လုပ်ပြီးပါပြီ');
           },
         ),
       );
@@ -75,9 +76,10 @@ class _BookContentDialogState extends State<BookContentDialog> {
         return;
       }
     }
+    if (!mounted) return;
     //file ရှိနေလား စစ်မယ်
     final title = widget.book.mmtitle;
-    final filePath = '${PathUtil.instance.getOutPath()}/$title.pdf';
+    final filePath = '${PathUtil.getOutPath()}/$title.pdf';
 
     if (File(filePath).existsSync()) {
       goPdfReader(context, filePath);
@@ -111,11 +113,11 @@ class _BookContentDialogState extends State<BookContentDialog> {
                 SizedBox(
                   width: 150,
                   height: 170,
-                  child: CacheImage(
+                  child: TCacheImage(
                     url: widget.book.coverUrl,
                     width: double.infinity,
                     fit: BoxFit.fill,
-                    cachePath: PathUtil.instance.getCachePath(),
+                    cachePath: PathUtil.getCachePath(),
                   ),
                 ),
                 Column(

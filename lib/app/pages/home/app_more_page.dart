@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:mm_book/my_libs/clean_cache/cache_component.dart';
+import 'package:mm_book/my_libs/setting/app_setting_screen.dart';
+import 'package:mm_book/my_libs/setting/theme_component.dart';
+import 'package:t_widgets/t_widgets.dart';
 import 'package:than_pkg/than_pkg.dart';
 
-import '../../components/index.dart';
-import '../../notifiers/app_notifier.dart';
-import '../../screens/index.dart';
-import '../../services/index.dart';
-import '/app/widgets/index.dart';
 
 class AppMorePage extends StatelessWidget {
   const AppMorePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MyScaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text('More'),
       ),
@@ -20,24 +19,9 @@ class AppMorePage extends StatelessWidget {
         child: Column(
           children: [
             //theme
-            ListTileWithDesc(
-              leading: Icon(Icons.dark_mode_outlined),
-              title: 'Dark Theme',
-              trailing: ValueListenableBuilder(
-                valueListenable: isDarkThemeNotifier,
-                builder: (context, isDark, child) => Checkbox(
-                  value: isDark,
-                  onChanged: (value) {
-                    isDarkThemeNotifier.value = value!;
-                    //set config
-                    appConfigNotifier.value.isDarkTheme = value;
-                    setConfigFile(appConfigNotifier.value);
-                  },
-                ),
-              ),
-            ),
+            ThemeComponent(),
             //version
-            ListTileWithDesc(
+            TListTileWithDesc(
               leading: Icon(Icons.settings),
               title: 'Setting',
               trailing: Icon(Icons.arrow_forward_ios_rounded),
@@ -65,7 +49,7 @@ class AppMorePage extends StatelessWidget {
                   return Text('error');
                 }
                 if (snapshot.hasData && snapshot.data != null) {
-                  return ListTileWithDesc(
+                  return TListTileWithDesc(
                     leading: Icon(Icons.cloud_upload_rounded),
                     title: 'Check Version',
                     desc: 'Current Version - ${snapshot.data!.version}',

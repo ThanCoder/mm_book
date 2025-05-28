@@ -20,9 +20,11 @@ dependencies:
   html: ^0.15.5
   intl: ^0.20.2
   mime: ^2.0.0
-  pdfrx: ^1.1.12
+  pdfrx: ^1.1.29
   provider: ^6.1.2
-  than_pkg: ^1.6.5
+  t_html_parser: ^0.0.1
+  t_widgets: ^0.0.1
+  than_pkg: ^2.3.0
   timeago: ^3.2.2
   uuid: ^4.5.1
 

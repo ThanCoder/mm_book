@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:mm_book/my_libs/setting/path_util.dart';
 
 import '../../constants.dart';
-import '../../utils/path_util.dart';
 
 class DioServices {
   static final DioServices instance = DioServices._();
@@ -62,7 +62,7 @@ class DioServices {
     var res = '';
     try {
       if (url.isEmpty) return res;
-      final savePath = '${PathUtil.instance.getCachePath()}/$cacheName.html';
+      final savePath = '${PathUtil.getCachePath()}/$cacheName.html';
       final cacheFile = File(savePath);
       if (!isOverride && await cacheFile.exists()) {
         res = await cacheFile.readAsString();

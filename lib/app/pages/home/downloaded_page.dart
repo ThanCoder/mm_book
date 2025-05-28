@@ -6,7 +6,7 @@ import 'package:mm_book/app/components/offline_book_list_item.dart';
 import 'package:mm_book/app/go_route_helper.dart';
 import 'package:mm_book/app/models/offline_book_model.dart';
 import 'package:mm_book/app/services/offline_book_services.dart';
-import 'package:mm_book/app/widgets/core/index.dart';
+import 'package:t_widgets/t_widgets.dart';
 import 'package:than_pkg/than_pkg.dart';
 
 class DownloadedPage extends StatefulWidget {
@@ -114,7 +114,7 @@ class _DownloadedPageState extends State<DownloadedPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MyScaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text('Downloaded Books'),
         actions: [

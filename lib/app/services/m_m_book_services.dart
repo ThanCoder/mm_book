@@ -3,8 +3,8 @@ import 'package:mm_book/app/constants.dart';
 import 'package:mm_book/app/models/book_author_model.dart';
 import 'package:mm_book/app/models/book_genres_model.dart';
 import 'package:mm_book/app/models/m_m_book_model.dart';
+import 'package:mm_book/app/services/core/dio_services.dart';
 import 'package:mm_book/app/services/html_dom_services.dart';
-import 'package:mm_book/app/services/index.dart';
 
 class MMBookServicesResponse {
   List<MMBookModel> list;

@@ -284,10 +284,10 @@ packages:
     dependency: "direct main"
     description:
       name: html
-      sha256: "1fc58edeaec4307368c60d59b7e15b9d658b57d7f3125098b6294153c75337ec"
+      sha256: "6d1264f2dffa1b1101c25a91dff0dc2daee4c18e87cd8538729773c073dbf602"
       url: "https://pub.dev"
     source: hosted
-    version: "0.15.5"
+    version: "0.15.6"
   http:
     dependency: transitive
     description:
@@ -484,10 +484,10 @@ packages:
     dependency: "direct main"
     description:
       name: pdfrx
-      sha256: "1cd46fe4f282faeab4db34bab970969cf0f2baf31a512e3d6aa93ca4103d83b8"
+      sha256: "90747e916a64366b8beb69e9ac175e9134df520110543ab284b839102bf4b7e1"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.14"
+    version: "1.1.29"
   petitparser:
     dependency: transitive
     description:
@@ -637,6 +637,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.1"
+  t_html_parser:
+    dependency: "direct main"
+    description:
+      name: t_html_parser
+      sha256: "338095b1719eb41d55fc51055d8510e8f0ec4b4dcdff36ba2e265fa8a8b18eaf"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
+  t_widgets:
+    dependency: "direct main"
+    description:
+      name: t_widgets
+      sha256: "559410905a051bcaad5196720e416c614face93ff2b57d0bccd1f10d13a9c147"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   term_glyph:
     dependency: transitive
     description:
@@ -657,10 +673,10 @@ packages:
     dependency: "direct main"
     description:
       name: than_pkg
-      sha256: "136d3a83d082be1cb7bdb07b2a0362ea77bfdae08bc982d75676a870ad150d95"
+      sha256: a9d23b060155e0fc956fd88d4db50cf27d8196d4f20cfe61da00dcb7df9c2370
       url: "https://pub.dev"
     source: hosted
-    version: "1.6.6"
+    version: "2.3.0"
   timeago:
     dependency: "direct main"
     description:

@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:mm_book/app/services/core/recent_db_services.dart';
+import 'package:mm_book/my_libs/setting/path_util.dart';
 
 import '../../constants.dart';
-import '../../services/core/index.dart';
-import '../../utils/index.dart';
 
 class DownloadProgressDialog extends StatefulWidget {
   List<String> pathUrlList;
@@ -69,7 +69,7 @@ class _DownloadProgressDialogState extends State<DownloadProgressDialog> {
 
           final urlPath = '$api/download?path=$path';
           final savePath =
-              '${PathUtil.instance.createDir(widget.saveDirPath)}/${PathUtil.instance.getBasename(path)}';
+              '${PathUtil.createDir(widget.saveDirPath)}/${PathUtil.getBasename(path)}';
 
           // print('/url $urlPath \nsavePath $savePath');
           //download url
@@ -77,7 +77,7 @@ class _DownloadProgressDialogState extends State<DownloadProgressDialog> {
           //progress
           setState(() {
             progress++;
-            title = 'downloaded: ${PathUtil.instance.getBasename(path)}';
+            title = 'downloaded: ${PathUtil.getBasename(path)}';
           });
           // await Future.delayed(const Duration(milliseconds: 1200));
         } catch (e) {

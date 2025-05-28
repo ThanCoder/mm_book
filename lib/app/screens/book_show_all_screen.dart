@@ -6,10 +6,8 @@ import 'package:mm_book/app/components/book_list_item.dart';
 import 'package:mm_book/app/dialogs/book_content_dialog.dart';
 import 'package:mm_book/app/models/m_m_book_model.dart';
 import 'package:mm_book/app/services/m_m_book_services.dart';
-import 'package:mm_book/app/utils/path_util.dart';
-import 'package:mm_book/app/widgets/core/index.dart';
-
-import '../widgets/core/cache_image.dart';
+import 'package:mm_book/my_libs/setting/path_util.dart';
+import 'package:t_widgets/t_widgets.dart';
 
 class BookShowAllScreen extends StatefulWidget {
   String title;
@@ -172,10 +170,10 @@ class _BookShowAllScreenState extends State<BookShowAllScreen> {
   Widget _getTitleWidget(String title) {
     if (title.endsWith('.gif')) {
       return SizedBox(
-        child: CacheImage(
+        child: TCacheImage(
           url: title,
           fit: BoxFit.contain,
-          cachePath: PathUtil.instance.getCachePath(),
+          cachePath: PathUtil.getCachePath(),
         ),
       );
     }
@@ -184,7 +182,7 @@ class _BookShowAllScreenState extends State<BookShowAllScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MyScaffold(
+    return Scaffold(
       appBar: AppBar(
         title: _getTitleWidget(widget.title),
         actions: [

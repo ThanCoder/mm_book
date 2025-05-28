@@ -7,9 +7,9 @@ import 'package:mm_book/app/extensions/index.dart';
 import 'package:mm_book/app/models/book_author_model.dart';
 import 'package:mm_book/app/screens/book_show_all_screen.dart';
 import 'package:mm_book/app/services/m_m_book_services.dart';
-import 'package:mm_book/app/utils/index.dart';
-import 'package:mm_book/app/widgets/core/cache_image.dart';
-import 'package:mm_book/app/widgets/core/index.dart';
+import 'package:mm_book/my_libs/setting/path_util.dart';
+import 'package:t_widgets/t_widgets.dart';
+
 
 class AuthorScreen extends StatefulWidget {
   const AuthorScreen({super.key});
@@ -78,19 +78,19 @@ class _AuthorScreenState extends State<AuthorScreen> {
   Widget _getTitleWidget(BookAuthorModel author, {bool isAZWidet = false}) {
     if (author.imageUrl.isNotEmpty) {
       if (PlatformExtension.isDesktop()) {
-        return CacheImage(
-          maxWidth: 50,
+        return TCacheImage(
+          // maxWidth: 50,
           url: author.imageUrl,
           // fit: BoxFit.contain,
-          cachePath: PathUtil.instance.getCachePath(),
+          cachePath: PathUtil.getCachePath(),
         );
       }
       // is linux
-      return CacheImage(
-        maxWidth: 50,
+      return TCacheImage(
+        // maxWidth: 50,
         url: author.imageUrl,
         // fit: BoxFit.contain,
-        cachePath: PathUtil.instance.getCachePath(),
+        cachePath: PathUtil.getCachePath(),
       );
     }
     if (isAZWidet) {
@@ -180,7 +180,7 @@ class _AuthorScreenState extends State<AuthorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MyScaffold(
+    return Scaffold(
       appBar: AppBar(
         // title: Text('Author'),
         title: Row(

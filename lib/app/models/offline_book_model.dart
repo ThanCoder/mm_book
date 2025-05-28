@@ -2,7 +2,7 @@
 import 'dart:io';
 
 import 'package:mm_book/app/extensions/string_extension.dart';
-import 'package:mm_book/app/utils/path_util.dart';
+import 'package:mm_book/my_libs/setting/path_util.dart';
 
 class OfflineBookModel {
   String title;
@@ -24,7 +24,7 @@ class OfflineBookModel {
     return OfflineBookModel(
       title: title,
       path: path,
-      coverPath: '${PathUtil.instance.getCachePath()}/$title.png',
+      coverPath: '${PathUtil.getCachePath()}/$title.png',
       size: file.statSync().size,
       date: file.statSync().modified.millisecondsSinceEpoch,
     );

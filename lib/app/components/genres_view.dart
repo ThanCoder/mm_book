@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mm_book/app/models/book_genres_model.dart';
 import 'package:mm_book/app/services/m_m_book_services.dart';
-import 'package:mm_book/app/widgets/index.dart';
+import 'package:t_widgets/t_widgets.dart' show TLoader, TChip;
 
 class GenresView extends StatefulWidget {
   void Function(BookGenresModel genres) onClicked;
@@ -64,7 +64,7 @@ class _GenresViewState extends State<GenresView> {
                       (index) {
                         final genres = list[index];
                         return TChip(
-                          title: genres.title,
+                          title: Text(genres.title),
                           onClick: () => widget.onClicked(genres),
                         );
                       },
